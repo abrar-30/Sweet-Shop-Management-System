@@ -91,3 +91,43 @@ describe('SweetShop - Search Sweets', () => {
     expect(results.map(s => s.name)).toEqual(expect.arrayContaining(['Gulab Jamun', 'Gajar Halwa']));
   });
 });
+
+
+describe('SweetShop - Inventory Management (Purchase and Restock)', () => {
+  let shop;
+
+  beforeEach(() => {
+    shop = new SweetShop();
+    shop.addSweet({ id: 1001, name: 'Kaju Katli', category: 'Nut-Based', price: 50, quantity: 20 });
+  });
+
+  test('should reduce quantity when a sweet is purchased', () => {
+    shop.purchaseSweet(1001, 5);
+    const sweet = shop.viewSweets().find(s => s.id === 1001);
+    expect(sweet.quantity).toBe(15);
+  });
+
+  test('should throw error if purchase quantity exceeds stock', () => {
+    expect(() => {
+      shop.purchaseSweet(1001, 25);
+    }).toThrow('Not enough stock to complete the purchase');
+  });
+
+  test('should throw error if sweet ID not found for purchase', () => {
+    expect(() => {
+      shop.purchaseSweet(9999, 1);
+    }).toThrow('Sweet with this ID does not exist');
+  });
+
+  test('should increase quantity when a sweet is restocked', () => {
+    shop.restockSweet(1001, 10);
+    const sweet = shop.viewSweets().find(s => s.id === 1001);
+    expect(sweet.quantity).toBe(30);
+  });
+
+  test('should throw error if sweet ID not found during restock', () => {
+    expect(() => {
+      shop.restockSweet(9999, 10);
+    }).toThrow('Sweet with this ID does not exist');
+  });
+});
