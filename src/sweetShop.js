@@ -38,6 +38,26 @@ searchByPriceRange(min, max) {
   viewSweets() {
     return this.sweets;
   }
+
+purchaseSweet(id, quantity) {
+  const sweet = this.sweets.find(s => s.id === id);
+  if (!sweet) {
+    throw new Error('Sweet with this ID does not exist');
+  }
+  if (sweet.quantity < quantity) {
+    throw new Error('Not enough stock to complete the purchase');
+  }
+  sweet.quantity -= quantity;
+}
+
+restockSweet(id, quantity) {
+  const sweet = this.sweets.find(s => s.id === id);
+  if (!sweet) {
+    throw new Error('Sweet with this ID does not exist');
+  }
+  sweet.quantity += quantity;
+}
+ 
 }
 
 module.exports = { SweetShop };
