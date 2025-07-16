@@ -10,7 +10,13 @@ class SweetShop {
     }
     this.sweets.push(sweet);
   }
-
+  deleteSweet(id) {
+    const index = this.sweets.findIndex(s => s.id === id);
+    if (index === -1) {
+      throw new Error('Sweet with this ID does not exist');
+    }
+    this.sweets.splice(index, 1);
+  }
   viewSweets() {
     return this.sweets;
   }
